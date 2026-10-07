@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: fernway
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fernway-local}
+      POSTGRES_DB: fernway
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fernway"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+  api:
+    build: ./api
+    environment:
+      DATABASE_URL: postgresql+psycopg://fernway:${POSTGRES_PASSWORD:-fernway-local}@db:5432/fernway
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/healthz')"]
+      interval: 2s
+      timeout: 3s
+      retries: 15

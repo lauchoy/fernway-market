@@ -1,1 +1,36 @@
 .DS_Store
+.env
+.venv/
+__pycache__/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+node_modules/
+dist/
+
+# env and credentials (only .env.example is tracked)
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+.webui_secret_key
+
+# local editor and agent tooling
+.idea/
+.vscode/
+.claude/
+.cursor/
+.agents/
+.gemini/
+.qwen/
+
+# test and build artifacts
+.import_linter_cache/
+coverage/
+htmlcov/
+.coverage
+*.log
+
+# generated synthetic data (reproducible from the seed; fixtures are committed explicitly)
+data/generated/
